@@ -1,0 +1,64 @@
+Documentation of launching website using Dockerfile and Kubernetes:-
+
+
+[Considering Kubernetes and Docker installation in all node is completed]
+
+1. Make a directory for the Dockerfile setup
+2. Create file with name of “Dockerfile” inside directory
+3. Make entry of instructions in file as:-
+
+        FROM            ubuntu
+        RUN             apt-get update -y
+        RUN             apt-get install apache2 -y
+        COPY            index.html  /var/www/html/
+        CMD             [“/usr/sbin/apachectl” , “-DFOREGROUND”]
+
+Save and exit
+4. Make “index.html” file inside same directory and write whatever you want to see on your web
+5. Run command “ docker image build . -t (docker-hub-username)/ubuntu_kube ”
+6. Login to docker hub using “docker login” command and give username and password
+7. Run command “ docker image push username/image-name“
+8. Come to the master node of Kubernetes and make directory where you can make definition file for the Deployment and Service
+9. Make Deployment-defnition file with .yml extension and make entry
+     
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+      name: dep-1
+spec:
+      replicas: 23
+      selector:
+              matchLabels:
+                      app: abhinav
+      template:
+              metadata:
+                      labels:
+                             app: abhinav
+              spec:
+                      containers:
+                           - name: httpd-cont
+                             image: username/image-name
+
+10. Run deployment-definition file with command “ kubectl create -f file-name.yml “
+11. Make NodePort Service definition file with .yml extension and make entry
+
+apiVersion: v1
+kind: Service
+metadata:
+     name: node-port-project-1
+spec:
+     selector:
+         app: abhinav
+     type: NodePort
+     ports:
+       - targetPort: 80
+         port: 80
+         nodePort: 30009
+
+12. Run the Service Definition file with command “kubectl create -f file-name.yml” 
+
+Here website is running on 30009 port number
+
+
+
+
