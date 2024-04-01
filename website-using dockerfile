@@ -37,7 +37,7 @@ spec:
               spec:
                       containers:
                            - name: httpd-cont
-                             image: username/image-name
+                             image: abhi3136/new_kube
 
 10. Run deployment-definition file with command “ kubectl create -f file-name.yml “
 11. Make NodePort Service definition file with .yml extension and make entry
